@@ -1,2 +1,1 @@
-# QCS
-Quantum Cooperative Search with GenSAT
+An implementation of the Quantum Cooperative Search (QCS) Algorithm with GenSAT described in the paper [Quantum Cooperative Search algorithm 3-SAT](https://www.sciencedirect.com/science/article/pii/S0022000006001012) using the Qiskit SDK.
