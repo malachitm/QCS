@@ -1,4 +1,5 @@
 ### QCS
+--------
 An implementation of the Quantum Cooperative Search (QCS) Algorithm with GenSAT described by [1] using the Qiskit SDK.
 
 ### References:
