@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "QCS-with-GenSAT"
+version = "0.00"
+readme = "README.md"
+dynamic = ["version"]
+requires-python = "==3.10"
+license = {text = "MIT License"}
+dependencies = [
+	"qiskit >= 1.1.1",
+	"qiskit[visualization]"
+]
+authors = [
+	{name = "Malachi McInvale", email = "mmcinvale@fsu.edu"},
+	{name = "Jess Moorefield", email = "jmoorefield2@fsu.edu"}
+]
+classifiers = [
+	"Development Status :: 3 - Alpha",
+	"Intended Audience :: Students",
+	"Programming Language :: Python :: 3.10"
+]
+
+[project.urls]
+Repository = "https://github.com:malachitm/QCS.git"
