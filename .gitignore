@@ -4,4 +4,5 @@ include/
 share/
 
 *.cfg
+*.cnf
 lib64
