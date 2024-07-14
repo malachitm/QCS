@@ -13,5 +13,6 @@ def get_qubit_num(n: int) -> int:
 if __name__ == "__main__":
 	print(get_qubit_num(25))
 	#print(get_qubit_num2(23))
-	#backend = AerSimulator.from_backend("ibm_cleveland")
+	noise_model = NoiseModel.from_backend("ibm_cleveland")
+	backend = AerSimulator(noise_model=noise_model)
 	
