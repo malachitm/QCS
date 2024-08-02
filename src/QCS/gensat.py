@@ -21,6 +21,8 @@ def getFitness(truthAssignment, formula, qubitList) -> int :
     numUnSatisfied = noQubitClauses - count 
     return numUnSatisfied
 
+# the specific implementation of hillClimbing is never specified in the paper
+# we went for the brute force approach for the sake of time
 def hillClimb(truthAssignment, formula, qubitList, fitness) -> int :
     bestFitness = fitness
     indexToFlip = -1 
