@@ -21,7 +21,7 @@ def getFitness(truthAssignment, formula, qubitList) -> int :
     numUnSatisfied = noQubitClauses - count 
     return numUnSatisfied
 
-def hillClimb(truthAssignment, formula, fitness) -> int :
+def hillClimb(truthAssignment, formula, qubitList, fitness) -> int :
     bestFitness = fitness
     indexToFlip = -1 
     for i in range(len(truthAssignment)):
@@ -32,18 +32,9 @@ def hillClimb(truthAssignment, formula, fitness) -> int :
         if newFitness < bestFitness:
             indexToFlip = i
     return indexToFlip
-
-
-numVars = 0
-numQubits = 0
-queries = 0 
-
-# in the paper, which variables are chosen as qubits is calculated using the 'the crashing probability'
-# for sake of time, just choose randomly? 
-qubitList = random.choices(population=range(1, numVars, 1), k=numQubits)
         
 # this is the modified version of GSAT as described in the paper 
-def GenSAT(formula, qubitList, maxTries, maxFlips) -> list:
+def GenSAT(formula, qubitList, numVars, maxTries, maxFlips) -> list:
     for i in range(1, maxTries) :
         truthAssignment = initialTruths(numVars) 
         for j in range(1, maxFlips) :
@@ -52,7 +43,7 @@ def GenSAT(formula, qubitList, maxTries, maxFlips) -> list:
                 return truthAssignment
             else :
                 # variable whose assigned is to be changed is chosen at random from those that would give an equally good improvement
-                index = hillClimb(truthAssignment, formula, fitness)
+                index = hillClimb(truthAssignment, formula, qubitList, fitness)
 
                 if index != -1 :    # if we found a better fitness value 
                     # flip truth value
