@@ -3,6 +3,7 @@
 #from functools import cache
 
 import gensat
+import qcs
 import os
 import random
 
@@ -45,10 +46,14 @@ if __name__ == "__main__":
 		queries = 0 
 		maxTries = 0
 		maxFlips = 0
+		maxQueries = 0
+		numGenerations = 0
 
 		# in the paper, which variables are chosen as qubits is calculated using the 'the crashing probability'
 		# for sake of time, just choose randomly? 
 		qubitList = random.choices(population=range(1, numVars, 1), k=numQubits)
 
 		bestAssignment = gensat.GenSAT(formula, qubitList, numVars, maxTries, maxFlips)
+
+	qcs.QCS(file, numVars, numQubits, formula, qubitList, maxQueries, numGenerations)
 	
