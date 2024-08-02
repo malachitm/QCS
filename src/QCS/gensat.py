@@ -1,22 +1,64 @@
-'''A 3-SAT formula F(X)=(x1 V x3 V x4 ) ∧ (x2 V x4 V x5) ∧ (x1 V x2 V x4) ∧ (x3 V x4 V x6)
-x1, x2, x3 and x4 are classical-bit variables; x5 and x6 are quantum-bit variables.'''
-
 import random
 
-def GenSAT(formula, maxTries, maxFlips, randomWalkProb):
-    for i in range(1, maxTries) :
-        truth = initial(formula) #generate an initial truth assignment for j := 1 to Max-flips
-        for j in range(1, maxFlips) :
-            if truth satisfies formula :
-                return truth
+#generate initial truth assignments for variables
+def initialTruths(numVars) -> list :
+    return [random.choice([True, False]) for num in range(numVars)]
+
+# fitness value (the number of unsatisfied clauses that have no qubit-variable) = 0
+def getFitness(truthAssignment, formula, qubitList) -> int : 
+    count = 0
+    noQubitClauses = list(filter(lambda qubit: qubit in qubitList, formula))
+    for clause in noQubitClauses :
+        for literal in clause :
+            if literal > 0 :
+                if truthAssignment[literal] is True :
+                   break    # break the first time we see a True value 
             else :
-                Poss-flips = select(formula, truth, randomWalkProb); #select set of vars to pick from
-                V = pick(Post-flips); pick one
-                T = T with V’s truth assignment flipped end
-    print("no satisfying assignment found")
+                # the negative of False is True 
+                if truthAssignment[literal] is False :
+                    break
+        count += 1
+    numUnSatisfied = noQubitClauses - count 
+    return numUnSatisfied
+
+def hillClimb(truthAssignment, formula, fitness) -> int :
+    bestFitness = fitness
+    indexToFlip = -1 
+    for i in range(len(truthAssignment)):
+        newAssignment = truthAssignment.copy() # for every variable, we are going to make a new list and only flip that variable
+        newAssignment[i] = not newAssignment[i]
+        newFitness = getFitness(truthAssignment, formula, qubitList)
         
-def select(formula, truth, randomWalkProb) :
-    if Random[0, 1] < randomWalkProb :
-        then all variables in unsatisfied clauses
-    else :
-        hclimb(formula, truth); #compute “best” local neighbors
+        if newFitness < bestFitness:
+            indexToFlip = i
+    return indexToFlip
+
+
+numVars = 0
+numQubits = 0
+queries = 0 
+
+# in the paper, which variables are chosen as qubits is calculated using the 'the crashing probability'
+# for sake of time, just choose randomly? 
+qubitList = random.choices(population=range(1, numVars, 1), k=numQubits)
+        
+# this is the modified version of GSAT as described in the paper 
+def GenSAT(formula, qubitList, maxTries, maxFlips) -> list:
+    for i in range(1, maxTries) :
+        truthAssignment = initialTruths(numVars) 
+        for j in range(1, maxFlips) :
+            fitness = getFitness(truthAssignment, formula, qubitList)
+            if fitness == 0 :   # want fitness to be minimized (0)
+                return truthAssignment
+            else :
+                # variable whose assigned is to be changed is chosen at random from those that would give an equally good improvement
+                index = hillClimb(truthAssignment, formula, fitness)
+
+                if index != -1 :    # if we found a better fitness value 
+                    # flip truth value
+                    formula[index] = not formula[index]
+                
+    print("no satisfying assignment found")
+    return []
+
+
